@@ -1,7 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View, ImageBackground } from "react-native";
+import { StyleSheet, ImageBackground } from "react-native";
 import { GoogleSignin } from "@react-native-community/google-signin";
-import SignIn from "./src/pages/SignIn";
 import { AuthProvider } from "./src/context/Auth";
 import Router from "./src/routes";
 

@@ -1,0 +1,9 @@
+
+.icon-star:before { content: '\e800'; } /* '' */
+.icon-pokemon-trainer:before { content: '\e801'; } /* '' */
+.icon-pokemon:before { content: '\e802'; } /* '' */
+.icon-contact-list:before { content: '\e803'; } /* '' */
+.icon-fist:before { content: '\e804'; } /* '' */
+.icon-pokedex-(1):before { content: '\e805'; } /* '' */
+.icon-pokedex:before { content: '\e806'; } /* '' */
+.icon-crown:before { content: '\e807'; } /* '' */
