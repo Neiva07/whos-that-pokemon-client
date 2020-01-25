@@ -8,13 +8,19 @@ import { SearchFriend as SearchFriendScreen } from "../../Friends/searchFriend";
 import { FriendProfile as FriendProfileScreen } from "../../Friends/friendProfile";
 import { GameSettings as GameSettingsScreen } from "../gameSettings";
 
-const PlayWithFriend = createStackNavigator({
-  FriendsList: PlayWithFriendScreen,
-  NewFriend: SearchFriendScreen,
-  FriendProfile: FriendProfileScreen
-});
+const PlayWithFriend = createStackNavigator(
+  {
+    FriendsList: PlayWithFriendScreen,
+    NewFriend: SearchFriendScreen,
+    FriendProfile: FriendProfileScreen
+  },
+  {
+    headerMode: "none",
+    mode: "card"
+  }
+);
 
-const MyModals = createSwitchNavigator({
+export const MyModals = createSwitchNavigator({
   PlayWithFriend,
   Requests: {
     screen: RequestsList

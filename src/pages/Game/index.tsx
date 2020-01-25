@@ -1,8 +1,9 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import { MainPage as NewGame } from "./newGame/index";
+import { MainPage as NewGame, MyModals } from "./newGame/index";
 import { OpenGame } from "./openGame/openGame";
-const GameTabs = createMaterialTopTabNavigator(
+import { createStackNavigator } from "react-navigation-stack";
+const MainGamePage = createMaterialTopTabNavigator(
   {
     NewGame: {
       screen: NewGame,
@@ -20,6 +21,17 @@ const GameTabs = createMaterialTopTabNavigator(
   {
     initialRouteName: "NewGame",
     tabBarOptions: { style: { backgroundColor: "#D94230" } }
+  }
+);
+
+const GameTabs = createStackNavigator(
+  {
+    MainGamePage,
+    MyModals
+  },
+  {
+    headerMode: "none",
+    mode: "modal"
   }
 );
 
