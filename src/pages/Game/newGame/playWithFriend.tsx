@@ -1,10 +1,12 @@
 import React from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import { Button, ListItem } from "react-native-elements";
-import { SearchFriendModal } from "../Friends/searchFriendModal";
-import { list } from "./gamesList";
-export const PlayWithFriend = () => {
-  const handleNewFriend = () => {};
+import { SearchFriend } from "../../Friends/searchFriend";
+import { list } from "../gamesList";
+export const PlayWithFriend = props => {
+  const handleNewFriend = () => {
+    props.navigation.navigate("NewFriend");
+  };
   const startGame = () => {};
 
   const friendsList = ({ item }) => (

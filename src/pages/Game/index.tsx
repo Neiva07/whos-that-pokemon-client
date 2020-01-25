@@ -1,7 +1,7 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import { NewGame } from "./newGame";
-import { OpenGame } from "./openGame";
+import { MainPage as NewGame } from "./newGame/index";
+import { OpenGame } from "./openGame/openGame";
 const GameTabs = createMaterialTopTabNavigator(
   {
     NewGame: {

@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { GamesList, list } from "./gamesList";
+import { GamesList, list } from "../gamesList";
 export const OpenGame = () => {
   return (
     <View style={styles.container}>

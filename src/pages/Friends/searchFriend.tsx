@@ -1,9 +1,9 @@
 import React from "react";
 import { View } from "react-native";
 import { Input } from "react-native-elements";
-export const SearchFriendModal = () => {
+export const SearchFriend = () => {
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <Input />
     </View>
   );

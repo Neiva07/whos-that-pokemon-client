@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { GamesList, list } from "./gamesList";
+import { GamesList, list } from "../gamesList";
 
 export const RequestsList = () => {
   return (
