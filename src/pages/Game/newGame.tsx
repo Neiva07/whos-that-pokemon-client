@@ -3,12 +3,13 @@ import { View, Text, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { Button } from "react-native-elements";
 import Icon from "../../CustomIcon";
-import { GestureResponderEvent } from "react-native";
-import { GamesList } from "./gamesList";
 import { useToggle } from "../../util/hooks";
+import { PlayWithFriend } from "./playWithFriend";
+import { RequestsList } from "./requestsList";
 export const NewGame = () => {
   const { active, activate, toggle, disable } = useToggle(false);
   const [buttonPressed, setButtonPressed] = useState("Requests");
+
   const handlePlayWithFriend = () => {
     activate();
     setButtonPressed("PlayWithFriend");
@@ -56,19 +57,34 @@ export const NewGame = () => {
         isVisible={active}
         onBackButtonPress={() => disable()}
         onBackdropPress={disable}
+        style={styles.modal}
       >
-        <GamesList />
-        {/* <View style={{ flex: 1 }}>
-          <Text>CONTENT!</Text>
-        </View> */}
+        {buttonPressed === "Requests" ? (
+          <RequestsList />
+        ) : buttonPressed === "PlayWithFriend" ? (
+          <PlayWithFriend />
+        ) : null}
       </Modal>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center"
+  },
+  modal: {
+    backgroundColor: "white",
+    // maxHeight: 200,
+    marginTop: 100,
+    marginBottom: 100,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    paddingBottom: 12,
+    paddingTop: 12
   }
 });

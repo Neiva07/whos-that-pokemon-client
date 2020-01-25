@@ -56,6 +56,7 @@ const MainApp = createAppContainer(
     }
   )
 );
+
 const Router = createAppContainer(
   createSwitchNavigator(
     {
