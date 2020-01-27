@@ -1,6 +1,11 @@
 import React from "react";
 import { View, FlatList } from "react-native";
 import { ListItem } from "react-native-elements";
+import { NavigationAction } from "react-navigation";
+import { NavigationBottomTabScreenComponent } from "react-navigation-tabs";
+import { NavigationTabScreenProps } from "react-navigation-tabs";
+import { NavigationStackProp } from "react-navigation-stack";
+
 // import { User } from "@react-native-community/google-signin";
 
 export const list = [
@@ -77,21 +82,25 @@ export const list = [
     subtitle: "Gen: 1, 3, 5"
   }
 ];
-interface Data {
-  users: User[];
-}
 interface User {
   name: string;
   avatar_url: string;
   subtitle: string;
 }
+interface Props {
+  users: User[];
+  navigation: NavigationStackProp;
+}
 
-export const GamesList = (data: Data) => {
+export const GamesList = (props: Props) => {
+  const { navigation } = props;
+  const { users } = props;
+
+  console.log(props);
   const handleLoadGame = () => {
-    //change to game page
+    navigation.navigate("GameSettings");
   };
   const renderItem = ({ item }: { item: User }) => {
-    console.log(item);
     return (
       <ListItem
         leftAvatar={{ source: { uri: item.avatar_url } }}
@@ -111,7 +120,7 @@ export const GamesList = (data: Data) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={data.users}
+        data={users}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         onEndReached={handleMoreLoad}
