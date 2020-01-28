@@ -1,19 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-
-const Index = () => {
+import { View } from "react-native";
+import { FriendsRanking } from "./friendsRanking";
+const Index = props => {
   return (
-    <View style={styles.container}>
-      <Text>Ranking</Text>
+    <View style={{ flex: 1 }}>
+      <FriendsRanking {...props} />
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
 
 export default Index;
