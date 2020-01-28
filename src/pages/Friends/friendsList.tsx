@@ -10,6 +10,10 @@ export const FriendsList = props => {
     setSearch(text);
   };
 
+  const handleClickFriend = () => {
+    props.navigation.navigate("GameSettings");
+  };
+
   return (
     <View style={styles.container}>
       <SearchBar

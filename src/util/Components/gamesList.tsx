@@ -11,16 +11,13 @@ interface User {
 interface Props {
   users: User[];
   navigation: NavigationStackProp;
-  handleSelectUser?: () => void;
 }
 
-export const UsersList = (props: Props) => {
+export const GamesList = (props: Props) => {
   const { navigation } = props;
   const { users } = props;
 
-  const handleLoadGame = () => {
-    navigation.navigate("GameSettings");
-  };
+  const handleLoadGame = () => {};
   const renderItem = ({ item }: { item: User }) => {
     return (
       <ListItem
@@ -29,9 +26,7 @@ export const UsersList = (props: Props) => {
         subtitle={item.subtitle}
         bottomDivider
         chevron
-        onPress={
-          props.handleSelectUser ? props.handleSelectUser : handleLoadGame
-        }
+        onPress={handleLoadGame}
       />
     );
   };

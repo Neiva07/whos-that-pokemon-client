@@ -1,12 +1,21 @@
-import React from "react";
-import { View } from "react-native";
+import { createStackNavigator } from "react-navigation-stack";
 import { FriendsRanking } from "./friendsRanking";
-const Index = props => {
-  return (
-    <View style={{ flex: 1 }}>
-      <FriendsRanking {...props} />
-    </View>
-  );
-};
+import { GameLogDetails } from "./gameLogDetails";
 
-export default Index;
+const RankingRouting = createStackNavigator(
+  {
+    FriendsGameLog: FriendsRanking,
+    GameLog: {
+      screen: GameLogDetails,
+      navigationOptions: {
+        title: "GameLog"
+      }
+    }
+  },
+  {
+    mode: "card",
+    headerMode: "none"
+  }
+);
+
+export default RankingRouting;

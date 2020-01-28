@@ -11,6 +11,10 @@ export const FriendsRanking = props => {
     setSearch(text);
   };
 
+  const handleGameLog = () => {
+    props.navigation.navigate("GameLog");
+  };
+
   return (
     <View style={styles.container}>
       <SearchBar
@@ -21,7 +25,7 @@ export const FriendsRanking = props => {
         platform={"android"}
       />
 
-      <UsersList users={list} {...props} />
+      <UsersList users={list} {...props} handleSelectUser={handleGameLog} />
     </View>
   );
 };
