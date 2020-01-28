@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
-import { Input } from "react-native-elements";
+import { Input, SearchBar } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 export const SearchFriend = props => {
   const handleSearchEmail = () => {
+    //handle error
     props.navigation.navigate("FriendProfile");
   };
+  const [search, setSearch] = useState("");
 
+  const updateSearch = (text: string) => {
+    setSearch(text);
+  };
   return (
     <View style={{ flex: 1 }}>
-      <Input
-        placeholder="Type an email to look up for a friend"
-        leftIcon={<Icon name="envelope" size={24} color="black" />}
-        autoCompleteType={"email"}
-        keyboardType={"email-address"}
+      <SearchBar
+        placeholder="Type an email to search"
+        onChangeText={updateSearch}
+        value={search}
+        round={true}
+        platform={"android"}
         onSubmitEditing={handleSearchEmail}
       />
     </View>

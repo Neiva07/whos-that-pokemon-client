@@ -1,19 +1,11 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+import { createStackNavigator } from "react-navigation-stack";
+import { FriendsList } from "./friendsList";
+import { RequestsList } from "./requestsList";
 
-const Index = () => {
-  return (
-    <View style={styles.container}>
-      <Text>Friends</Text>
-    </View>
-  );
-};
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
-  }
+const topFriendNavigationBar = createMaterialTopTabNavigator({
+  Friends: FriendsList,
+  Requests: RequestsList
 });
 
-export default Index;
+export default topFriendNavigationBar;
