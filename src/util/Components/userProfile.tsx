@@ -1,21 +1,55 @@
-import React from "react";
+import React, { useRef, useContext } from "react";
 import {
   StyleSheet,
   Text,
   View,
   SafeAreaView,
   Image,
-  ScrollView
+  ScrollView,
+  Button
 } from "react-native";
-
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-export const UserProfile = () => {
+import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
+import { AuthContext } from "../../context/Auth";
+
+export const UserProfile = props => {
+  const {
+    action: { signOut }
+  } = useContext(AuthContext);
+  const menu = useRef(null);
+  const setMenu = (ref: React.MutableRefObject<any>) => {
+    menu.current = ref.current;
+  };
+  const handleLogout = () => {
+    menu.current.hide();
+    signOut();
+    props.navigation.navigate("Auth");
+  };
+  const handleShowMenu = () => {
+    menu.current.show();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.titleBar}>
           <Ionicons name="ios-arrow-back" size={24} color="#52575D"></Ionicons>
-          <Ionicons name="md-more" size={24} color="#52575D"></Ionicons>
+
+          <Menu
+            ref={menu}
+            button={
+              <View style={styles.more}>
+                <Ionicons
+                  name="md-more"
+                  onPress={handleShowMenu}
+                  size={24}
+                  color="#52575D"
+                ></Ionicons>
+              </View>
+            }
+          >
+            <MenuItem onPress={handleLogout}>Logout</MenuItem>
+          </Menu>
         </View>
 
         <View style={{ alignSelf: "center" }}>
@@ -283,5 +317,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginTop: 3,
     marginRight: 20
+  },
+  more: {
+    width: 40,
+    alignItems: "flex-end"
   }
 });

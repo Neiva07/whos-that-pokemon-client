@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { Button } from "react-native-elements";
@@ -6,15 +6,24 @@ import Icon from "../../../CustomIcon";
 import { useToggle } from "../../../util/hooks";
 import { PlayWithFriend } from "./playWithFriend";
 import { RequestsList } from "./requestsList";
+import { AuthContext } from "../../../context/Auth";
 export const NewGame = props => {
+  const {
+    action: { request }
+  } = useContext(AuthContext);
+
   const handlePlayWithFriend = () => {
     props.navigation.navigate("PlayWithFriend");
   };
   const handlePlayRandom = () => {
     props.navigation.navigate("");
   };
-  const handleRequests = () => {
-    props.navigation.navigate("Requests");
+  const handleRequests = async () => {
+    const response = await request("GET", "/api/users/3/friendship");
+
+    console.log(response);
+
+    // props.navigation.navigate("Requests");
   };
   return (
     <View style={styles.container}>

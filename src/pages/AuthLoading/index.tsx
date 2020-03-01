@@ -4,11 +4,11 @@ import { View, ActivityIndicator, StatusBar } from "react-native";
 
 const Index = props => {
   const {
-    action: { checkLogin }
+    action: { checkLogin, silentLogin }
   } = useContext(AuthContext);
 
   const redirect = async () => {
-    props.navigation.navigate((await checkLogin()) ? "App" : "Auth");
+    props.navigation.navigate((await silentLogin()) ? "App" : "Auth");
   };
 
   useEffect(() => {

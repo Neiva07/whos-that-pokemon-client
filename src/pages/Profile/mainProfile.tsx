@@ -2,10 +2,10 @@ import React from "react";
 import { View } from "react-native";
 import { UserProfile } from "../../util/Components/userProfile";
 
-export const MainProfile = () => {
+export const MainProfile = props => {
   return (
     <View style={{ flex: 1 }}>
-      <UserProfile />
+      <UserProfile {...props} />
     </View>
   );
 };

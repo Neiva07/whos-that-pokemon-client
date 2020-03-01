@@ -9,18 +9,23 @@ import { AuthContext } from "../../context/Auth";
 import { StyleSheet, View } from "react-native";
 
 // Somewhere in your code
-const Index = () => {
+const Index = props => {
   const {
     action: { login }
   } = useContext(AuthContext);
 
+  const signIn = async () => {
+    await login();
+    props.navigation.navigate("App");
+  };
+
   return (
     <View style={styles.container}>
       <GoogleSigninButton
-        style={{ width: 192, height: 48 }}
+        style={{ width: 208, height: 60 }}
         size={GoogleSigninButton.Size.Wide}
         color={GoogleSigninButton.Color.Light}
-        onPress={login}
+        onPress={signIn}
       />
     </View>
   );

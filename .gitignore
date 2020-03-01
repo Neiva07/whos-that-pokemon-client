@@ -1,6 +1,11 @@
 # OSX
 #
 .DS_Store
+#environmnet
+.env
+
+#Memory
+*.rdb
 
 # Xcode
 #
@@ -29,7 +34,6 @@ build/
 .gradle
 local.properties
 *.iml
-
 # node.js
 #
 node_modules/
