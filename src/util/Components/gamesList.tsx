@@ -1,29 +1,40 @@
 import React from "react";
 import { ListItem } from "react-native-elements";
-import { NavigationStackProp } from "react-navigation-stack";
+import { NavigationStackScreenProps } from "react-navigation-stack";
 import { View, FlatList } from "react-native";
-
-interface User {
-  name: string;
-  avatar_url: string;
-  subtitle: string;
-}
-interface Props {
-  users: User[];
-  navigation: NavigationStackProp;
+import { Game } from "../../context/types";
+import { Avatar } from "react-native-elements";
+interface GameListProps extends NavigationStackScreenProps {
+  games: Game[];
+  handleSelectGame?: () => void;
 }
 
-export const GamesList = (props: Props) => {
+export const GamesList: React.FC<GameListProps> = props => {
   const { navigation } = props;
-  const { users } = props;
+  const { games } = props;
 
   const handleLoadGame = () => {};
-  const renderItem = ({ item }: { item: User }) => {
+  const renderItem = ({ item }: { item: Game }) => {
+    const names = item.name.split(" ");
+
+    const initials = names.map(name => name[0]);
+
+    const initialsString = initials.join("");
+
+    const avatar = item.photo ? (
+      { source: { uri: item.photo } }
+    ) : (
+      <Avatar size="small" rounded title={initialsString} activeOpacity={0.7} />
+    );
+
+    const friendScore = item.friendScore || 0;
+    const userScore = item.userScore || 0;
+
     return (
       <ListItem
-        leftAvatar={{ source: { uri: item.avatar_url } }}
+        leftAvatar={avatar}
         title={item.name}
-        subtitle={item.subtitle}
+        subtitle={`${userScore} x ${friendScore}`}
         bottomDivider
         chevron
         onPress={handleLoadGame}
@@ -38,7 +49,7 @@ export const GamesList = (props: Props) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        data={users}
+        data={games}
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         onEndReached={handleMoreLoad}

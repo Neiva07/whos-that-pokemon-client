@@ -1,10 +1,40 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import { GamesList, list } from "../Game/gamesList";
+import React, { useState, useContext, useEffect } from "react";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { SearchBar } from "react-native-elements";
+import { UsersList } from "../../util/Components/usersList";
+import { FriendsContext } from "../../context/Friends";
 export const RequestsList = props => {
-  return (
+  const {
+    state: { requests, loading },
+    action: { getAllFriends }
+  } = useContext(FriendsContext);
+  const [search, setSearch] = useState("");
+
+  const updateSearch = (text: string) => {
+    setSearch(text);
+  };
+
+  useEffect(() => {
+    getAllFriends();
+  }, []);
+
+  const handleClickFriend = () => {
+    props.navigation.navigate("GameSettings");
+  };
+
+  return loading ? (
+    <ActivityIndicator />
+  ) : (
     <View style={styles.container}>
-      <GamesList users={list} {...props} />
+      <SearchBar
+        placeholder="Filter"
+        onChangeText={updateSearch}
+        value={search}
+        round={true}
+        platform={"android"}
+      />
+
+      <UsersList users={requests} {...props} />
     </View>
   );
 };

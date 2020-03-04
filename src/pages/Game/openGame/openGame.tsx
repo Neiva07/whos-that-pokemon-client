@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { GamesList, list } from "../gamesList";
-export const OpenGame = props => {
+import { GamesList } from "../../../util/Components/gamesList";
+import { GamesContext } from "../../../context/Games";
+import { NavigationStackScreenProps } from "react-navigation-stack";
+
+interface OpenGameProps extends NavigationStackScreenProps {}
+
+export const OpenGame: React.FC<OpenGameProps> = props => {
+  const {
+    state: { openGames },
+    action: { getAllGames }
+  } = useContext(GamesContext);
+
+  useEffect(() => {
+    getAllGames();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <GamesList users={list} {...props} />
+      <GamesList games={openGames} {...props} />
     </View>
   );
 };

@@ -4,6 +4,8 @@ import { GoogleSignin } from "@react-native-community/google-signin";
 import { AuthProvider } from "./src/context/Auth";
 import Router from "./src/routes";
 import { GOOGLE_CLIENT_ID } from "react-native-dotenv";
+import { FriendsProvider } from "./src/context/Friends";
+import { GamesProvider } from "./src/context/Games";
 
 export default function App() {
   GoogleSignin.configure({
@@ -18,7 +20,11 @@ export default function App() {
       style={{ width: "100%", height: "100%", flex: 1 }}
     >
       <AuthProvider>
-        <Router />
+        <FriendsProvider>
+          <GamesProvider>
+            <Router />
+          </GamesProvider>
+        </FriendsProvider>
       </AuthProvider>
     </ImageBackground>
   );

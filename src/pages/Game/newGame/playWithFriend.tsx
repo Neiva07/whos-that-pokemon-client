@@ -1,26 +1,29 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import { Button, ListItem } from "react-native-elements";
 import { SearchFriend } from "../../Friends/searchFriend";
-import { list } from "../gamesList";
-export const PlayWithFriend = props => {
+import { NavigationStackScreenProps } from "react-navigation-stack";
+import { FriendsContext } from "../../../context/Friends";
+import { UsersList } from "../../../util/Components/usersList";
+
+interface PlayWithFriendsProps extends NavigationStackScreenProps {}
+
+export const PlayWithFriend: React.FC<PlayWithFriendsProps> = props => {
+  const {
+    state: { friends },
+    action: { getAllFriends }
+  } = useContext(FriendsContext);
+
+  useEffect(() => {
+    getAllFriends();
+  }, []);
+
   const handleNewFriend = () => {
     props.navigation.navigate("NewFriend");
   };
-  const startGame = () => {};
-
-  const friendsList = ({ item }) => (
-    <ListItem
-      leftAvatar={{ source: { uri: item.avatar_url } }}
-      title={item.name}
-      subtitle={item.subtitle}
-      bottomDivider
-      chevron
-      onPress={startGame}
-    />
-  );
-
-  const handleMoreLoad = () => {};
+  const startGame = () => {
+    props.navigation.navigate("GameSettings");
+  };
 
   const keyExtractor = (item, index) => index.toString();
 
@@ -41,13 +44,7 @@ export const PlayWithFriend = props => {
         />
       </View>
 
-      <FlatList
-        renderItem={friendsList}
-        data={list}
-        keyExtractor={keyExtractor}
-        onEndReached={handleMoreLoad}
-        onEndReachedThreshold={0}
-      />
+      <UsersList users={friends} {...props} />
     </View>
   );
 };

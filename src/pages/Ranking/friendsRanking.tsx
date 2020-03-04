@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { list } from "../Game/gamesList";
 import { UsersList } from "../../util/Components/usersList";
 import { SearchBar } from "react-native-elements";
+import { FriendsContext } from "../../context/Friends";
 
 export const FriendsRanking = props => {
+  const {
+    state: { friends },
+    action: { getAllFriends }
+  } = useContext(FriendsContext);
+
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    getAllFriends();
+  }, []);
 
   const updateSearch = (text: string) => {
     setSearch(text);
@@ -25,7 +34,7 @@ export const FriendsRanking = props => {
         platform={"android"}
       />
 
-      <UsersList users={list} {...props} handleSelectUser={handleGameLog} />
+      <UsersList users={friends} {...props} handleSelectUser={handleGameLog} />
     </View>
   );
 };

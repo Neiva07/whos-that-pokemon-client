@@ -2,10 +2,10 @@ import React from "react";
 import {
   GoogleSignin,
   statusCodes,
-  User
+  User as GoogleUser
 } from "@react-native-community/google-signin";
 import { HOST } from "react-native-dotenv";
-import { Token } from "./types";
+import { Token, UserAccount, UserData } from "./types";
 
 interface IContext {
   state: AuthState;
@@ -21,9 +21,9 @@ interface IContext {
     signOut(): Promise<void>;
   };
 }
-interface AuthState {
+export interface AuthState {
   tokens: Token;
-  userData: User;
+  user: UserAccount;
   isLogin: boolean;
 }
 
@@ -31,7 +31,7 @@ export const AuthContext = React.createContext({} as IContext);
 
 export class AuthProvider extends React.PureComponent<void, AuthState> {
   state = {
-    userData: {} as User,
+    user: {} as UserAccount,
     isLogin: false,
     tokens: {
       idToken: "",
@@ -42,16 +42,32 @@ export class AuthProvider extends React.PureComponent<void, AuthState> {
   login = async () => {
     try {
       await GoogleSignin.hasPlayServices();
-      console.log("here");
       const userInfo = await GoogleSignin.signIn();
-      this.setState({ userData: { ...userInfo }, isLogin: true });
       const data = { authCode: userInfo.serverAuthCode };
+      this.setState({
+        user: {
+          scopes: userInfo.scopes,
+          idToken: userInfo.idToken,
+          serverAuthCode: userInfo.serverAuthCode,
+          userData: {} as UserData
+        }
+      });
       const response = await this._request()("POST", "/api/users/signin", data);
-      console.log(response);
-      await this._handleSignInResult();
-      return;
+      if (response.status) {
+        this.setState({
+          user: {
+            ...this.state.user,
+            userData: { ...(response.user as UserData) }
+          },
+          isLogin: true
+        });
+        await this._handleSignInResult();
+        return;
+      } else {
+        console.log(response);
+      }
     } catch (error) {
-      this.setState({ userData: {} as User, isLogin: false });
+      this.setState({ user: {} as UserAccount, isLogin: false });
       console.log("error catched");
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log("SignIn has been cancelled");
@@ -72,7 +88,7 @@ export class AuthProvider extends React.PureComponent<void, AuthState> {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
-      this.setState({ userData: {} as User });
+      this.setState({ user: {} as UserAccount });
     } catch (error) {
       console.error(error);
     }
@@ -87,9 +103,20 @@ export class AuthProvider extends React.PureComponent<void, AuthState> {
   silentLogin = async () => {
     try {
       const userInfo = await GoogleSignin.signInSilently();
-      this.setState({ userData: userInfo });
+      const data = { authCode: userInfo.serverAuthCode };
+      const response = await this._request()("POST", "/api/users/signin", data);
+      if (response.status) {
+        this.setState({
+          user: { userData: { ...response.user }, ...this.state.user },
+          isLogin: true
+        });
+        await this._handleSignInResult();
+        return;
+      } else {
+        console.log(response);
+        return;
+      }
       await this._handleSignInResult();
-      console.log("silentLogin");
       return true;
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_REQUIRED) {
@@ -111,7 +138,7 @@ export class AuthProvider extends React.PureComponent<void, AuthState> {
   };
 
   _request = () => {
-    const accessToken = this.state.tokens && this.state.tokens.accessToken;
+    const serverAuthCode = this.state.user && this.state.user.serverAuthCode;
     const host = HOST;
 
     return async (
@@ -123,7 +150,8 @@ export class AuthProvider extends React.PureComponent<void, AuthState> {
         method: method
       };
       const header = new Headers();
-      if (accessToken) header.append("Authorization", `Bearer ${accessToken}`);
+      if (serverAuthCode)
+        header.append("Authorization", `Bearer ${serverAuthCode}`);
 
       const route = new URL(url, host);
 
@@ -141,10 +169,10 @@ export class AuthProvider extends React.PureComponent<void, AuthState> {
       options["headers"] = header;
       console.log(route.href, options);
       try {
-        const requestPromise = fetch(route.href, options).then(res =>
+        const response = await fetch(route.href, options).then(res =>
           res.json()
         );
-        return await requestPromise;
+        return response;
       } catch (err) {
         console.log(err);
       }
