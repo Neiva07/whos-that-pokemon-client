@@ -8,201 +8,147 @@ import {
   ScrollView,
   Button
 } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { AuthContext } from "../../context/Auth";
+import { NavigationStackScreenProps } from "react-navigation-stack";
+import { Friendship, UserData as User } from "../../context/types";
 
-export const UserProfile = props => {
+interface UserProfileProps extends NavigationStackScreenProps {
+  user: User | Friendship;
+}
+
+export const UserProfile: React.FC<UserProfileProps> = props => {
+  const { user } = props;
+
   const {
-    action: { signOut }
+    state: { user: profile }
   } = useContext(AuthContext);
-  const menu = useRef(null);
-  const setMenu = (ref: React.MutableRefObject<any>) => {
-    menu.current = ref.current;
-  };
-  const handleLogout = () => {
-    menu.current.hide();
-    signOut();
-    props.navigation.navigate("Auth");
-  };
-  const handleShowMenu = () => {
-    menu.current.show();
+
+  const Icon = () => {
+    if ("friendshipStatus" in user) {
+      if (user.friendshipStatus === 1 || user.friendshipStatus === 3) {
+        return (
+          <View style={styles.add}>
+            <FontAwesome5
+              name={"ios-add"}
+              size={24}
+              style={{ marginLeft: 4 }}
+              color="#DFD8C8"
+            ></FontAwesome5>
+          </View>
+        );
+      } else if (user.friendshipStatus === 2) {
+        return (
+          <View style={styles.add}>
+            <FontAwesome5
+              name={"play"}
+              size={24}
+              style={{ marginLeft: 4 }}
+              color="#DFD8C8"
+            ></FontAwesome5>
+          </View>
+        );
+        return null;
+      }
+    } else if (user.id === profile.userData.id) {
+      //edit
+      return null;
+    }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.titleBar}>
-          <Ionicons name="ios-arrow-back" size={24} color="#52575D"></Ionicons>
-
-          <Menu
-            ref={menu}
-            button={
-              <View style={styles.more}>
-                <Ionicons
-                  name="md-more"
-                  onPress={handleShowMenu}
-                  size={24}
-                  color="#52575D"
-                ></Ionicons>
-              </View>
-            }
-          >
-            <MenuItem onPress={handleLogout}>Logout</MenuItem>
-          </Menu>
-        </View>
-
-        <View style={{ alignSelf: "center" }}>
-          <View style={styles.profileImage}>
-            <Image
-              source={{
-                uri:
-                  "https://cdn.vox-cdn.com/thumbor/DTp9raihs-H_5AvJYmaGg7sHz-k=/0x0:2257x1320/920x613/filters:focal(949x480:1309x840):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/63738986/pokemon.0.0.png"
-              }}
-              style={styles.image}
-              resizeMode="center"
-            ></Image>
-          </View>
-          <View style={styles.dm}>
+    <React.Fragment>
+      <View style={{ alignSelf: "center" }}>
+        <View style={styles.profileImage}>
+          <Image
+            source={{
+              uri:
+                user.photo ||
+                "https://cdn.vox-cdn.com/thumbor/DTp9raihs-H_5AvJYmaGg7sHz-k=/0x0:2257x1320/920x613/filters:focal(949x480:1309x840):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/63738986/pokemon.0.0.png"
+            }}
+            style={styles.image}
+            resizeMode="center"
+          ></Image>
+          {
+            //HERE GOES UNFRIEND
+            /* <View style={styles.dm}>
             <MaterialIcons
               name="chat"
               size={18}
               color="#DFD8C8"
             ></MaterialIcons>
-          </View>
-          <View style={styles.active}></View>
-          <View style={styles.add}>
-            <Ionicons
-              name="ios-add"
-              size={48}
-              color="#DFD8C8"
-              style={{ marginTop: 6, marginLeft: 2 }}
-            ></Ionicons>
-          </View>
+          </View> */
+          }
         </View>
 
-        <View style={styles.infoContainer}>
-          <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
-            Julie
-          </Text>
-          <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>
-            Photographer
-          </Text>
-        </View>
+        <Icon />
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
+          {user.name}
+        </Text>
+        <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>
+          {user.email}
+        </Text>
+      </View>
 
-        <View style={styles.statsContainer}>
-          <View style={styles.statsBox}>
-            <Text style={[styles.text, { fontSize: 24 }]}>483</Text>
-            <Text style={[styles.text, styles.subText]}>Posts</Text>
-          </View>
-          <View
-            style={[
-              styles.statsBox,
-              {
-                borderColor: "#DFD8C8",
-                borderLeftWidth: 1,
-                borderRightWidth: 1
-              }
-            ]}
-          >
-            <Text style={[styles.text, { fontSize: 24 }]}>45,844</Text>
-            <Text style={[styles.text, styles.subText]}>Followers</Text>
-          </View>
-          <View style={styles.statsBox}>
-            <Text style={[styles.text, { fontSize: 24 }]}>302</Text>
-            <Text style={[styles.text, styles.subText]}>Following</Text>
-          </View>
+      <View style={styles.statsContainer}>
+        <View style={styles.statsBox}>
+          <Text style={[styles.text, { fontSize: 24 }]}>483</Text>
+          <Text style={[styles.text, styles.subText]}>Games</Text>
         </View>
+        <View
+          style={[
+            styles.statsBox,
+            {
+              borderColor: "#DFD8C8",
+              borderLeftWidth: 1,
+              borderRightWidth: 1
+            }
+          ]}
+        >
+          <Text style={[styles.text, { fontSize: 24 }]}>45,844</Text>
+          <Text style={[styles.text, styles.subText]}>Wins</Text>
+        </View>
+        <View style={styles.statsBox}>
+          <Text style={[styles.text, { fontSize: 24 }]}>302</Text>
+          <Text style={[styles.text, styles.subText]}>Loses</Text>
+        </View>
+      </View>
 
-        <View style={{ marginTop: 32 }}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={styles.mediaImageContainer}>
-              <Image
-                source={{
-                  uri:
-                    "https://cdn.vox-cdn.com/thumbor/DTp9raihs-H_5AvJYmaGg7sHz-k=/0x0:2257x1320/920x613/filters:focal(949x480:1309x840):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/63738986/pokemon.0.0.png"
-                }}
-                style={styles.image}
-                resizeMode="cover"
-              ></Image>
-            </View>
-            <View style={styles.mediaImageContainer}>
-              <Image
-                source={{
-                  uri:
-                    "https://cdn.vox-cdn.com/thumbor/DTp9raihs-H_5AvJYmaGg7sHz-k=/0x0:2257x1320/920x613/filters:focal(949x480:1309x840):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/63738986/pokemon.0.0.png"
-                }}
-                style={styles.image}
-                resizeMode="cover"
-              ></Image>
-            </View>
-            <View style={styles.mediaImageContainer}>
-              <Image
-                source={{
-                  uri:
-                    "https://cdn.vox-cdn.com/thumbor/DTp9raihs-H_5AvJYmaGg7sHz-k=/0x0:2257x1320/920x613/filters:focal(949x480:1309x840):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/63738986/pokemon.0.0.png"
-                }}
-                style={styles.image}
-                resizeMode="cover"
-              ></Image>
-            </View>
-          </ScrollView>
-          <View style={styles.mediaCount}>
+      <Text style={[styles.subText, styles.recent]}>Recent Activity</Text>
+      <View style={{ alignItems: "center" }}>
+        <View style={styles.recentItem}>
+          <View style={styles.activityIndicator}></View>
+          <View style={{ width: 250 }}>
             <Text
-              style={[
-                styles.text,
-                { fontSize: 24, color: "#DFD8C8", fontWeight: "300" }
-              ]}
+              style={[styles.text, { color: "#41444B", fontWeight: "300" }]}
             >
-              70
-            </Text>
-            <Text
-              style={[
-                styles.text,
-                { fontSize: 12, color: "#DFD8C8", textTransform: "uppercase" }
-              ]}
-            >
-              Media
+              Started following{" "}
+              <Text style={{ fontWeight: "400" }}>Jake Challeahe</Text> and{" "}
+              <Text style={{ fontWeight: "400" }}>Luis Poteer</Text>
             </Text>
           </View>
         </View>
-        <Text style={[styles.subText, styles.recent]}>Recent Activity</Text>
-        <View style={{ alignItems: "center" }}>
-          <View style={styles.recentItem}>
-            <View style={styles.activityIndicator}></View>
-            <View style={{ width: 250 }}>
-              <Text
-                style={[styles.text, { color: "#41444B", fontWeight: "300" }]}
-              >
-                Started following{" "}
-                <Text style={{ fontWeight: "400" }}>Jake Challeahe</Text> and{" "}
-                <Text style={{ fontWeight: "400" }}>Luis Poteer</Text>
-              </Text>
-            </View>
-          </View>
 
-          <View style={styles.recentItem}>
-            <View style={styles.activityIndicator}></View>
-            <View style={{ width: 250 }}>
-              <Text
-                style={[styles.text, { color: "#41444B", fontWeight: "300" }]}
-              >
-                Started following{" "}
-                <Text style={{ fontWeight: "400" }}>Luke Harper</Text>
-              </Text>
-            </View>
+        <View style={styles.recentItem}>
+          <View style={styles.activityIndicator}></View>
+          <View style={{ width: 250 }}>
+            <Text
+              style={[styles.text, { color: "#41444B", fontWeight: "300" }]}
+            >
+              Started following{" "}
+              <Text style={{ fontWeight: "400" }}>Luke Harper</Text>
+            </Text>
           </View>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </View>
+    </React.Fragment>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF"
-  },
   text: {
     fontFamily: "HelveticaNeue",
     color: "#52575D"
@@ -212,12 +158,7 @@ const styles = StyleSheet.create({
     height: undefined,
     width: undefined
   },
-  titleBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 24,
-    marginHorizontal: 16
-  },
+
   subText: {
     fontSize: 12,
     color: "#AEB5BC",
@@ -317,9 +258,5 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginTop: 3,
     marginRight: 20
-  },
-  more: {
-    width: 40,
-    alignItems: "flex-end"
   }
 });

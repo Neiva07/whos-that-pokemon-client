@@ -1,7 +1,7 @@
 import React from "react";
 import { ListItem } from "react-native-elements";
 import { NavigationStackScreenProps } from "react-navigation-stack";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text, StyleSheet } from "react-native";
 import { Game } from "../../context/types";
 import { Avatar } from "react-native-elements";
 interface GameListProps extends NavigationStackScreenProps {
@@ -47,14 +47,34 @@ export const GamesList: React.FC<GameListProps> = props => {
   };
   const keyExtractor = (item, index) => index.toString();
   return (
-    <View style={{ flex: 1 }}>
-      <FlatList
-        data={games}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        onEndReached={handleMoreLoad}
-        onEndReachedThreshold={0}
-      />
+    <View style={styles.container}>
+      {games.length > 0 ? (
+        <FlatList
+          data={games}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          onEndReached={handleMoreLoad}
+          onEndReachedThreshold={0}
+        />
+      ) : (
+        <View style={styles.textContainer}>
+          <Text style={styles.text}>No games :(</Text>
+        </View>
+      )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  text: {
+    textAlign: "center"
+  },
+  textContainer: {
+    justifyContent: "center",
+    flexDirection: "column",
+    flex: 1
+  }
+});

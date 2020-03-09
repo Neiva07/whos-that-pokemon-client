@@ -8,6 +8,7 @@ import Friends from "./pages/Friends";
 import Profile from "./pages/Profile";
 import Ranking from "./pages/Ranking";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { Playing } from "./pages/Playing";
 import Icon from "./CustomIcon";
 import Icons from "react-native-vector-icons/FontAwesome";
 
@@ -62,7 +63,8 @@ const Router = createAppContainer(
     {
       AuthLoading: AuthLoadingScreen,
       Auth: SignIn,
-      App: MainApp
+      App: MainApp,
+      Playing
     },
     {
       initialRouteName: "AuthLoading"

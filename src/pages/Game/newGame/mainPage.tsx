@@ -19,11 +19,7 @@ export const NewGame = props => {
     props.navigation.navigate("");
   };
   const handleRequests = async () => {
-    const response = await request("GET", "/api/users/3/friendship");
-
-    console.log(response);
-
-    // props.navigation.navigate("Requests");
+    props.navigation.navigate("Requests");
   };
   return (
     <View style={styles.container}>

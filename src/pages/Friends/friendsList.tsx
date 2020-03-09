@@ -1,10 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  GestureResponderEvent
+} from "react-native";
 import { SearchBar } from "react-native-elements";
 import { UsersList } from "../../util/Components/usersList";
 import { FriendsContext } from "../../context/Friends";
+import { NavigationStackScreenProps } from "react-navigation-stack";
+import { Friendship } from "../../context/types";
 
-export const FriendsList = props => {
+interface FriendsProps extends NavigationStackScreenProps {}
+
+export const FriendsList: React.FC<FriendsProps> = props => {
   const {
     state: { friends, loading },
     action: { getAllFriends }
@@ -23,8 +32,11 @@ export const FriendsList = props => {
     console.log(friends);
   }, [friends]);
 
-  const handleClickFriend = () => {
-    props.navigation.navigate("GameSettings");
+  const handleClickFriend = (friend: Friendship) => {
+    console.log("reached here");
+    props.navigation.navigate("FriendProfile", {
+      user: friend
+    });
   };
 
   return loading ? (
@@ -39,7 +51,11 @@ export const FriendsList = props => {
         platform={"android"}
       />
 
-      <UsersList users={friends} {...props} />
+      <UsersList
+        users={friends}
+        {...props}
+        handleSelectUser={handleClickFriend}
+      />
     </View>
   );
 };

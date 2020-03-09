@@ -28,6 +28,7 @@ export interface Friendship {
   friendshipStatus: 1 | 2 | 3;
   friendTotalScore: number;
   userTotalScore: number;
+  email: string;
   friendId: number;
   name: string;
   photo: string;
