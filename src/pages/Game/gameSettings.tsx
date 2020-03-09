@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, Picker } from "react-native";
 import { CheckBox, Button } from "react-native-elements";
+import { NavigationSwitchScreenProps } from "react-navigation";
 
 const initialState = new Set();
 
-export const GameSettings = () => {
+interface GameSettingsProps extends NavigationSwitchScreenProps {}
+
+export const GameSettings: React.FC<GameSettingsProps> = props => {
   const [generations, setGenerations] = useState(initialState);
   const [timer, setTimer] = useState(30);
 
-  const handleSubmit = () => {};
+  const handleStartGame = () => {
+    console.log("out here");
+    console.log(props);
+    props.navigation.navigate("Playing", { config: { timer } });
+  };
 
   const handleSelectCheckbox = (index: number) => {
     setGenerations(gens => {
@@ -57,7 +64,7 @@ export const GameSettings = () => {
       <View style={styles.buttonContainer}>
         <Button
           buttonStyle={styles.button}
-          onPress={handleSubmit}
+          onPress={handleStartGame}
           title={"Start Game"}
         />
       </View>
