@@ -6,7 +6,7 @@ import {
 } from "@react-native-community/google-signin";
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/Auth";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ImageBackground } from "react-native";
 
 // Somewhere in your code
 const Index = props => {
@@ -20,14 +20,19 @@ const Index = props => {
   };
 
   return (
-    <View style={styles.container}>
-      <GoogleSigninButton
-        style={{ width: 208, height: 60 }}
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Light}
-        onPress={signIn}
-      />
-    </View>
+    <ImageBackground
+      source={require("../../assets/pokemon-field.jpg")}
+      style={{ width: "100%", height: "100%", flex: 1 }}
+    >
+      <View style={styles.container}>
+        <GoogleSigninButton
+          style={{ width: 208, height: 60 }}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Light}
+          onPress={signIn}
+        />
+      </View>
+    </ImageBackground>
   );
 };
 

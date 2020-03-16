@@ -1,6 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/Auth";
-import { View, ActivityIndicator, StatusBar } from "react-native";
+import {
+  View,
+  ActivityIndicator,
+  StatusBar,
+  ImageBackground
+} from "react-native";
 
 const Index = props => {
   const {
@@ -16,11 +21,16 @@ const Index = props => {
   }, []);
 
   return (
-    <View>
-      <ActivityIndicator />
+    <ImageBackground
+      source={require("../../assets/pikachu-lollipop.jpg")}
+      style={{ width: "100%", height: "100%", flex: 1 }}
+    >
+      <View>
+        <ActivityIndicator />
 
-      <StatusBar barStyle="default" />
-    </View>
+        <StatusBar barStyle="default" />
+      </View>
+    </ImageBackground>
   );
 };
 

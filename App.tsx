@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, ImageBackground } from "react-native";
+import { StyleSheet } from "react-native";
 import { GoogleSignin } from "@react-native-community/google-signin";
 import { AuthProvider } from "./src/context/Auth";
 import Router from "./src/routes";
@@ -15,18 +15,13 @@ export default function App() {
     // forceConsentPrompt: true // [Android] if you want to show the authorization prompt at each login.
   });
   return (
-    <ImageBackground
-      source={require("./src/assets/wallpaper-pokemon-mew.jpeg")}
-      style={{ width: "100%", height: "100%", flex: 1 }}
-    >
-      <AuthProvider>
-        <FriendsProvider>
-          <GamesProvider>
-            <Router />
-          </GamesProvider>
-        </FriendsProvider>
-      </AuthProvider>
-    </ImageBackground>
+    <AuthProvider>
+      <FriendsProvider>
+        <GamesProvider>
+          <Router />
+        </GamesProvider>
+      </FriendsProvider>
+    </AuthProvider>
   );
 }
 

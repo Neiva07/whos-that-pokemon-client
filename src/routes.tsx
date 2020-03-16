@@ -58,13 +58,17 @@ const MainApp = createAppContainer(
   )
 );
 
+const InnerRouter = createSwitchNavigator({
+  MainApp,
+  Playing
+});
+
 const Router = createAppContainer(
   createSwitchNavigator(
     {
       AuthLoading: AuthLoadingScreen,
       Auth: SignIn,
-      App: MainApp,
-      Playing
+      App: InnerRouter
     },
     {
       initialRouteName: "AuthLoading"
