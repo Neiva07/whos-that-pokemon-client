@@ -2,19 +2,25 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, Picker } from "react-native";
 import { CheckBox, Button } from "react-native-elements";
 import { NavigationSwitchScreenProps } from "react-navigation";
+import { Friendship } from "../../context/types";
 
 const initialState = new Set();
 
 interface GameSettingsProps extends NavigationSwitchScreenProps {}
 
+type Config = {
+  friend: Friendship;
+};
+
 export const GameSettings: React.FC<GameSettingsProps> = props => {
   const [generations, setGenerations] = useState(initialState);
   const [timer, setTimer] = useState(30);
+  const config: Config = props.navigation.getParam("config");
 
   const handleStartGame = () => {
-    console.log("out here");
-    console.log(props);
-    props.navigation.navigate("Playing", { config: { timer } });
+    props.navigation.navigate("Playing", {
+      config: { timer, friend: config.friend }
+    });
   };
 
   const handleSelectCheckbox = (index: number) => {

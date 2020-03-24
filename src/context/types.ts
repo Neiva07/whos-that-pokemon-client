@@ -48,3 +48,9 @@ export interface Game {
   timer: number;
   status: 1 | 2;
 }
+
+export interface GameInput {
+  userScore: number;
+  gens: number[];
+  timer: 30 | 45 | 60;
+}

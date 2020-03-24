@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
 import { material, materialColors } from "react-native-typography";
 import { NavigationContainerProps } from "react-navigation";
 import { Button } from "react-native-elements";
 import BackgroundTimer from "react-native-background-timer";
 import pokemons from "./pokemons.json";
+import { GamesContext } from "../../context/Games";
+import { GameInput, Friendship } from "../../context/types";
 interface PlayingProps extends NavigationContainerProps {}
 
 type Config = {
   timer: 30 | 45 | 60;
   generations: number[];
+  friend: Friendship;
 };
 
 type Pokemon = {
@@ -45,13 +48,27 @@ export const Playing: React.FC<PlayingProps> = props => {
   });
   const [disable, setDisable] = useState(false);
   const [options, setOptions] = useState<number[]>([]);
+  const {
+    action: { createGame }
+  } = useContext(GamesContext);
 
   useEffect(() => {
     if (timeLeft === 0) {
       setDisable(true);
       BackgroundTimer.stopBackgroundTimer();
+      endTimer();
     }
   }, [timeLeft]);
+
+  const endTimer = async () => {
+    const gameInput = {} as GameInput;
+    gameInput.timer = config.timer;
+    gameInput.gens = config.generations;
+    gameInput.userScore = score;
+
+    createGame(gameInput, config.friend.friendId);
+    props.navigation.navigate("GameStats");
+  };
 
   useEffect(() => {
     handleNewGuess();
@@ -131,7 +148,7 @@ export const Playing: React.FC<PlayingProps> = props => {
     setNumPlays(plays => ++plays);
     handleNewGuess();
   };
-
+  const onLoadImage = () => (timeLeft > 0 ? setDisable(false) : null);
   const url = `https://1555596267.rsc.cdn77.org/${rightPokemon.name}.png`;
 
   return (
@@ -157,7 +174,7 @@ export const Playing: React.FC<PlayingProps> = props => {
             onLoadStart={() => {
               setDisable(true);
             }}
-            onLoad={() => (timeLeft > 0 ? setDisable(false) : null)}
+            onLoad={onLoadImage}
           />
         </View>
         <View style={styles.container}>

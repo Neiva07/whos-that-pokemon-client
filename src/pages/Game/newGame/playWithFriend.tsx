@@ -5,6 +5,7 @@ import { SearchFriend } from "../../Friends/searchFriend";
 import { NavigationStackScreenProps } from "react-navigation-stack";
 import { FriendsContext } from "../../../context/Friends";
 import { UsersList } from "../../../util/Components/usersList";
+import { Friendship } from "../../../context/types";
 
 interface PlayWithFriendsProps extends NavigationStackScreenProps {}
 
@@ -21,8 +22,10 @@ export const PlayWithFriend: React.FC<PlayWithFriendsProps> = props => {
   const handleNewFriend = () => {
     props.navigation.navigate("NewFriend");
   };
-  const startGame = () => {
-    props.navigation.navigate("GameSettings");
+  const startGame = (friend: Friendship) => {
+    props.navigation.navigate("GameSettings", {
+      config: { friend }
+    });
   };
 
   const keyExtractor = (item, index) => index.toString();
@@ -44,7 +47,7 @@ export const PlayWithFriend: React.FC<PlayWithFriendsProps> = props => {
         />
       </View>
 
-      <UsersList users={friends} {...props} />
+      <UsersList users={friends} {...props} handleSelectUser={startGame} />
     </View>
   );
 };

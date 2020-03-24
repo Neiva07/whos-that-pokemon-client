@@ -1,7 +1,7 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { MainPage as NewGame, MyModals } from "./newGame/index";
-import { OpenGame } from "./openGame/openGame";
+import { OpenGame } from "./openGame";
 import { createStackNavigator } from "react-navigation-stack";
 const MainGamePage = createMaterialTopTabNavigator(
   {
