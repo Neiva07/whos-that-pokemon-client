@@ -116,6 +116,7 @@ UserData {
         ) : (
           <View style={styles.profileEditContainer}>
             <TextInput
+              autoFocus={true}
               style={[
                 styles.text,
                 {
@@ -128,23 +129,8 @@ UserData {
                 },
               ]}
               defaultValue={user.name}
+              onSubmitEditing={props.handleProfileEditSubmit}
             />
-            <TouchableOpacity
-              onPress={props.handleProfileEditSubmit}
-              style={{
-                marginLeft: 10,
-                justifyContent: "center",
-                alignItems: "center",
-                width: 24,
-                height: 32,
-              }}
-            >
-              <Ionicons
-                name="ios-arrow-back"
-                size={24}
-                color="#52575D"
-              ></Ionicons>
-            </TouchableOpacity>
           </View>
         )}
         <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>

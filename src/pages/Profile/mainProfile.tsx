@@ -21,9 +21,11 @@ export const MainProfile = (props) => {
   } = useContext(AuthContext);
 
   const menu = useRef(null);
+
   const setMenu = (ref: React.MutableRefObject<any>) => {
     menu.current = ref.current;
   };
+
   const handleLogout = () => {
     menu.current.hide();
     signOut();
@@ -32,6 +34,7 @@ export const MainProfile = (props) => {
   const handleProfileEdit = () => {
     menu.current.hide();
     setIsEditingProfile(true);
+
     // props.navigation.navigate("Edit Profile");
   };
   const handleProfileEditSubmit = () => {
