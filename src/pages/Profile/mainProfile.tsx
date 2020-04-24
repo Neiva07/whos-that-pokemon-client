@@ -1,16 +1,23 @@
-import React, { useContext, useRef } from "react";
-import { StyleSheet, View, SafeAreaView, ScrollView } from "react-native";
+import React, { useContext, useRef, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import { UserProfile } from "../../util/Components/userProfile";
 import { AuthContext } from "../../context/Auth";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 
-export const MainProfile = props => {
+export const MainProfile = (props) => {
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const {
     state: {
-      user: { userData }
+      user: { userData },
     },
-    action: { signOut }
+    action: { signOut },
   } = useContext(AuthContext);
 
   const menu = useRef(null);
@@ -22,37 +29,53 @@ export const MainProfile = props => {
     signOut();
     props.navigation.navigate("Auth");
   };
+  const handleProfileEdit = () => {
+    menu.current.hide();
+    setIsEditingProfile(true);
+    // props.navigation.navigate("Edit Profile");
+  };
+  const handleProfileEditSubmit = () => {
+    //POST TO BACKEND WITH NEW NAME
+    setIsEditingProfile(false);
+  };
   const handleShowMenu = () => {
     menu.current.show();
+  };
+  const handleBackButton = () => {
+    props.navigation.navigate("Battle");
   };
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.titleBar}>
-            <Ionicons
-              name="ios-arrow-back"
-              size={24}
-              color="#52575D"
-            ></Ionicons>
+            <TouchableOpacity onPress={handleBackButton} style={styles.more}>
+              <Ionicons
+                name="ios-arrow-back"
+                size={24}
+                color="#52575D"
+              ></Ionicons>
+            </TouchableOpacity>
 
             <Menu
               ref={menu}
               button={
-                <View style={styles.more}>
-                  <Ionicons
-                    name="md-more"
-                    onPress={handleShowMenu}
-                    size={24}
-                    color="#52575D"
-                  ></Ionicons>
-                </View>
+                <TouchableOpacity onPress={handleShowMenu} style={styles.more}>
+                  <Ionicons name="md-more" size={24} color="#52575D"></Ionicons>
+                </TouchableOpacity>
               }
             >
+              <MenuItem onPress={handleProfileEdit}>Edit Profile</MenuItem>
+              <MenuDivider />
               <MenuItem onPress={handleLogout}>Logout</MenuItem>
             </Menu>
           </View>
-          <UserProfile {...props} user={userData} />
+          <UserProfile
+            {...props}
+            user={userData}
+            isEditingProfile={isEditingProfile}
+            handleProfileEditSubmit={handleProfileEditSubmit}
+          />
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -62,16 +85,16 @@ export const MainProfile = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF"
+    backgroundColor: "#FFF",
   },
   more: {
-    width: 40,
-    alignItems: "flex-end"
+    width: 20,
+    alignItems: "center",
   },
   titleBar: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 24,
-    marginHorizontal: 16
-  }
+    marginHorizontal: 16,
+  },
 });

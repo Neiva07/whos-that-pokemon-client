@@ -7,9 +7,9 @@ import { useToggle } from "../../../util/hooks";
 import { PlayWithFriend } from "./playWithFriend";
 import { RequestsList } from "./requestsList";
 import { AuthContext } from "../../../context/Auth";
-export const NewGame = props => {
+export const NewGame = (props) => {
   const {
-    action: { request }
+    action: { request },
   } = useContext(AuthContext);
 
   const handlePlayWithFriend = () => {
@@ -23,32 +23,43 @@ export const NewGame = props => {
   };
   return (
     <View style={styles.container}>
-      <Button
-        onPress={handleRequests}
-        title="Requests"
-        buttonStyle={{
-          backgroundColor: "#D94230",
-          marginBottom: 12,
-          width: 200
-        }}
-      />
-      <Button
-        onPress={handlePlayWithFriend}
-        title="Play with Friend"
-        buttonStyle={{
-          backgroundColor: "#D94230",
-          marginBottom: 12,
-          width: 200
-        }}
-      />
-      <Button
-        onPress={handlePlayRandom}
-        title="Play Random"
-        buttonStyle={{
-          backgroundColor: "#D94230",
-          width: 200
-        }}
-      />
+      <View style={styles.buttonContainer}>
+        <Button
+          onPress={handleRequests}
+          title="Requests"
+          titleStyle={{
+            fontSize: 24,
+          }}
+          buttonStyle={{
+            backgroundColor: "#D94230",
+            marginBottom: 12,
+            width: 280,
+            }}
+        />
+        <Button
+          onPress={handlePlayWithFriend}
+          title="Play with a Friend"
+          titleStyle={{
+            fontSize: 24,
+          }}
+          buttonStyle={{
+            backgroundColor: "#D94230",
+            marginBottom: 12,
+            width: 280,
+          }}
+        />
+        <Button
+          onPress={handlePlayRandom}
+          title="Play Random Match"
+          titleStyle={{
+            fontSize: 24,
+          }}
+          buttonStyle={{
+            backgroundColor: "#D94230",
+            width: 280,
+          }}
+        />
+      </View>
     </View>
   );
 };
@@ -57,7 +68,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+  },
+  buttonContainer: {
+    marginTop: 120,
+    height: "50%",
+    justifyContent: "space-evenly",
   },
   modal: {
     backgroundColor: "white",
@@ -69,6 +85,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     paddingBottom: 12,
-    paddingTop: 12
-  }
+    paddingTop: 12,
+  },
 });

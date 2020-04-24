@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,7 +6,9 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
-  Button
+  Button,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import Menu, { MenuItem, MenuDivider } from "react-native-material-menu";
@@ -16,15 +18,37 @@ import { Friendship, UserData as User } from "../../context/types";
 
 interface UserProfileProps extends NavigationStackScreenProps {
   user: User | Friendship;
+  isEditingProfile: boolean;
+  handleProfileEditSubmit: () => void;
 }
 
-export const UserProfile: React.FC<UserProfileProps> = props => {
-  const { user } = props;
-
+export const UserProfile: React.FC<UserProfileProps> = (props) => {
+  // const { user } = props;
+  /*
+UserData {
+  id: number;
+  givenName: string;
+  familyName: string;
+  photo: string;
+  name: string;
+  email: string;
+  googleID: string;
+}
+*/
+  const user: User | Friendship = {
+    id: 123456,
+    givenName: "Matheus",
+    familyName: "Araujo",
+    email: "teste@gmail.com",
+    photo:
+      "https://qph.fs.quoracdn.net/main-qimg-1788700fe0433d32534fc4ab2e9b22e7",
+    googleID: "1234567889",
+    name: "Matheus Araujo",
+    friendshipStatus: undefined,
+  };
   const {
-    state: { user: profile }
+    state: { user: profile },
   } = useContext(AuthContext);
-
   const Icon = () => {
     if ("friendshipStatus" in user) {
       if (user.friendshipStatus === 1 || user.friendshipStatus === 3) {
@@ -65,7 +89,7 @@ export const UserProfile: React.FC<UserProfileProps> = props => {
             source={{
               uri:
                 user.photo ||
-                "https://cdn.vox-cdn.com/thumbor/DTp9raihs-H_5AvJYmaGg7sHz-k=/0x0:2257x1320/920x613/filters:focal(949x480:1309x840):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/63738986/pokemon.0.0.png"
+                "https://cdn.vox-cdn.com/thumbor/DTp9raihs-H_5AvJYmaGg7sHz-k=/0x0:2257x1320/920x613/filters:focal(949x480:1309x840):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/63738986/pokemon.0.0.png",
             }}
             style={styles.image}
             resizeMode="center"
@@ -82,12 +106,47 @@ export const UserProfile: React.FC<UserProfileProps> = props => {
           }
         </View>
 
-        <Icon />
+        {/* <Icon /> */}
       </View>
       <View style={styles.infoContainer}>
-        <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
-          {user.name}
-        </Text>
+        {!props.isEditingProfile ? (
+          <Text style={[styles.text, { fontWeight: "200", fontSize: 36 }]}>
+            {user.name}
+          </Text>
+        ) : (
+          <View style={styles.profileEditContainer}>
+            <TextInput
+              style={[
+                styles.text,
+                {
+                  fontWeight: "200",
+                  fontSize: 36,
+                  borderColor: "gray",
+                  borderWidth: 1,
+                  borderRadius: 3,
+                  maxWidth: 280,
+                },
+              ]}
+              defaultValue={user.name}
+            />
+            <TouchableOpacity
+              onPress={props.handleProfileEditSubmit}
+              style={{
+                marginLeft: 10,
+                justifyContent: "center",
+                alignItems: "center",
+                width: 24,
+                height: 32,
+              }}
+            >
+              <Ionicons
+                name="ios-arrow-back"
+                size={24}
+                color="#52575D"
+              ></Ionicons>
+            </TouchableOpacity>
+          </View>
+        )}
         <Text style={[styles.text, { color: "#AEB5BC", fontSize: 14 }]}>
           {user.email}
         </Text>
@@ -104,8 +163,8 @@ export const UserProfile: React.FC<UserProfileProps> = props => {
             {
               borderColor: "#DFD8C8",
               borderLeftWidth: 1,
-              borderRightWidth: 1
-            }
+              borderRightWidth: 1,
+            },
           ]}
         >
           <Text style={[styles.text, { fontSize: 24 }]}>45,844</Text>
@@ -151,25 +210,25 @@ export const UserProfile: React.FC<UserProfileProps> = props => {
 const styles = StyleSheet.create({
   text: {
     fontFamily: "HelveticaNeue",
-    color: "#52575D"
+    color: "#52575D",
   },
   image: {
     flex: 1,
     height: undefined,
-    width: undefined
+    width: undefined,
   },
 
   subText: {
     fontSize: 12,
     color: "#AEB5BC",
     textTransform: "uppercase",
-    fontWeight: "500"
+    fontWeight: "500",
   },
   profileImage: {
     width: 200,
     height: 200,
     borderRadius: 100,
-    overflow: "hidden"
+    overflow: "hidden",
   },
   dm: {
     backgroundColor: "#41444B",
@@ -179,7 +238,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   active: {
     backgroundColor: "#34FFB9",
@@ -189,7 +248,7 @@ const styles = StyleSheet.create({
     padding: 4,
     height: 20,
     width: 20,
-    borderRadius: 10
+    borderRadius: 10,
   },
   add: {
     backgroundColor: "#41444B",
@@ -200,28 +259,28 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   infoContainer: {
     alignSelf: "center",
     alignItems: "center",
-    marginTop: 16
+    marginTop: 16,
   },
   statsContainer: {
     flexDirection: "row",
     alignSelf: "center",
-    marginTop: 32
+    marginTop: 32,
   },
   statsBox: {
     alignItems: "center",
-    flex: 1
+    flex: 1,
   },
   mediaImageContainer: {
     width: 180,
     height: 200,
     borderRadius: 12,
     overflow: "hidden",
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   mediaCount: {
     backgroundColor: "#41444B",
@@ -237,18 +296,18 @@ const styles = StyleSheet.create({
     shadowColor: "rgba(0, 0, 0, 0.38)",
     shadowOffset: { width: 0, height: 10 },
     shadowRadius: 20,
-    shadowOpacity: 1
+    shadowOpacity: 1,
   },
   recent: {
     marginLeft: 78,
     marginTop: 32,
     marginBottom: 6,
-    fontSize: 10
+    fontSize: 10,
   },
   recentItem: {
     flexDirection: "row",
     alignItems: "flex-start",
-    marginBottom: 16
+    marginBottom: 16,
   },
   activityIndicator: {
     backgroundColor: "#CABFAB",
@@ -257,6 +316,10 @@ const styles = StyleSheet.create({
     width: 12,
     borderRadius: 6,
     marginTop: 3,
-    marginRight: 20
-  }
+    marginRight: 20,
+  },
+  profileEditContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
 });
